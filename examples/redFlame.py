@@ -126,8 +126,11 @@ def on_event(camera, event_type, event_status, renderer):
         camera.temperature_unit = SeekCameraTemperatureUnit.CELSIUS
         camera.termography_window = SeekCamera.thermography_window.getter(320)
         camera.plateau = SeekCameraHistEQAGCPlateauRedistributionMode.ACTIVE_BINS_ONLY
-        SeekCamera.shutter_trigger
+        
+        
+        # Emissity Scene
         SeekCamera.scene_emissivity.setter(250)
+        # Thermography
         SeekCamera.thermography_window.getter(10)
         SeekCamera.thermography_offset.setter(10)
 
@@ -135,15 +138,18 @@ def on_event(camera, event_type, event_status, renderer):
         SeekCameraFrameHeader.thermography_max.setter(1000.0)
         SeekCameraFrameHeader.thermography_min.setter(3500.0)
 
-        camera.set_filter_state = SeekCameraFilterState.DISABLED
+        camera.set_filter_state = SeekCameraFilterState.ENABLED
 
         camera.register_frame_available_callback(on_frame, renderer)
         camera.capture_session_start(SeekCameraFrameFormat.COLOR_ARGB8888)
-
+        
+        # This is a Filter for apply to Thermal camera 
         camera.set_filter_state = SeekCameraFilter.GRADIENT_CORRECTION
-
+        
+        
+        # To remove the autoshutter change 'SeekCameraShutterMode.AUTO' to 'SeekCameraShutterMode.MANUAL'
         camera.shutter_mode = SeekCameraShutterMode.AUTO
-        camera.histeq_agc_num_bins = 1
+        camera.histeq_agc_num_bins = 1000
 
         camera.linear_agc_lock_mode = SeekCameraLinearAGCLockMode.MANUAL
         camera.linear_agc_lock_min = 3000
